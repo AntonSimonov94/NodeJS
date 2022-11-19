@@ -20,25 +20,16 @@ const simpleNumber = (rangeStart, rangeEnd) => {
 }
 
 const changeColors = (array) => {
-    let i = 1;
+    let i = 0;
     array.forEach((num) => {
-        switch (i) {
-            case 1: {
-                console.log(colors.green(num));
-                i++;
-                break;
-            }
-            case 2: {
-                console.log(colors.yellow(num));
-                i++;
-                break;
-            }
-            case 3: {
-                console.log(colors.red(num));
-                i = 1;
-                break;
-            }
-        }
+        let color = [colors.green, colors.yellow, colors.red]
+        if (i < color.length-1) {
+            console.log(color[i](num));
+            i++;
+        } else {
+            console.log(color[i](num));
+            i = 0;
+        };
     })
 }
 
