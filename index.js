@@ -16,7 +16,7 @@ const simpleNumber = (rangeStart, rangeEnd) => {
         }
         if (n === 1) arr.push(i);
     }
-    return arr;
+    return arr
 }
 
 const changeColors = (array) => {
@@ -29,7 +29,7 @@ const changeColors = (array) => {
         } else {
             console.log(color[i](num));
             i = 0;
-        };
+        }
     })
 }
 
