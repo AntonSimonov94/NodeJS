@@ -11,12 +11,12 @@ const simpleNumber = (rangeStart, rangeEnd) => {
         for (let j = 2; j < i; j++) {
             if (i % j === 0) {
                 n = 0;
-                break
-            } else n = 1
+                break;
+            } else n = 1;
         }
         if (n === 1) arr.push(i);
     }
-    return arr
+    return arr;
 }
 
 const changeColors = (array) => {
@@ -45,6 +45,6 @@ const changeColors = (array) => {
 if ((start) && (end) && (Number(end) >= Number(start))) {
     let arrNumber = simpleNumber(start, end);
     if (arrNumber.length === 0) {
-        console.log('В данном диапозоне простых чисел нет')
+        console.log('В данном диапозоне простых чисел нет');
     } else changeColors(arrNumber)
-} else console.log('Неверный диапозон чисел')
+} else console.log('Неверный диапозон чисел');
