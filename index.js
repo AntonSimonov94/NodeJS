@@ -4,11 +4,11 @@ let toTime = date.split('-');
 let time = new Date(toTime[3], toTime[2] - 1, toTime[1], toTime[0]);
 
 function printTimer(to) {
-    let from = setInterval(function () {
+    let timer = setInterval(function () {
         let now = new Date();
         if (now >= to) {
             console.log('Время вышло')
-            clearInterval(from);
+            clearInterval(timer);
         } else {
             let timer = new Date(to.getTime() - now.getTime());
             console.clear();
