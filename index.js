@@ -1,11 +1,11 @@
 const ACCESS_LOG = './access_tmp.log';
-
 import fs from 'fs';
 import readline from 'readline';
 
 const line = readline.createInterface({
     input: fs.createReadStream(ACCESS_LOG),
 });
+
 let ipText1 = '89.123.1.41';
 let ipText2 = '34.48.240.111';
 let numLine34 = 0;
@@ -30,7 +30,7 @@ const writeLog = (LOG, ipText, count) => {
 }
 
 line.on("line", function (input) {
-    if(input.includes(ipText1)) {
+    if (input.includes(ipText1)) {
         ++numLine34;
         writeLog(ACCESS_LOG_34, input, numLine34)
 
@@ -38,5 +38,4 @@ line.on("line", function (input) {
         ++numLine89;
         writeLog(ACCESS_LOG_89, input, numLine89)
     }
-
 });
