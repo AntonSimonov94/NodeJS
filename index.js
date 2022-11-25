@@ -3,7 +3,7 @@ const [date] = process.argv.splice(2);
 let toTime = date.split('-');
 let time = new Date(toTime[3], toTime[2] - 1, toTime[1], toTime[0]);
 
-function printTimer(to) {
+const printTimer = (to) => {
     let timer = setInterval(function () {
         let now = new Date();
         if (now >= to) {
