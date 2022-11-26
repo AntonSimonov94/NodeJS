@@ -1,7 +1,7 @@
 const [date] = process.argv.splice(2);
 
-let toTime = date.split('-');
-let time = new Date(toTime[3], toTime[2] - 1, toTime[1], toTime[0]);
+let [hours, day, month, year] = date.split('-');
+let time = new Date(year, month-1, day, hours);
 
 const printTimer = (to) => {
     let timer = setInterval(function () {
