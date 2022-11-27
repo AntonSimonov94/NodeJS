@@ -6,13 +6,25 @@ const line = readline.createInterface({
     input: fs.createReadStream(ACCESS_LOG),
 });
 
-let ipText1 = '89.123.1.41';
-let ipText2 = '34.48.240.111';
+let ipText1 = '34.48.240.111';
+let ipText2 = '89.123.1.41';
 let numLine34 = 0;
 let numLine89 = 0;
 
 const ACCESS_LOG_34 = `./${ipText1}_requests.log`;
 const ACCESS_LOG_89 = `./${ipText2}_requests.log`;
+
+const existFileDelete = (LOG) => {
+    fs.stat(LOG, function (err) {
+        if (err) {
+            return console.error(err);
+        }
+        fs.unlink(LOG, function (err) {
+            if (err) return console.log(err);
+            console.log('File deleted successfully');
+        });
+    });
+}
 
 const writeLog = (LOG, ipText, count) => {
     fs.writeFile(
@@ -29,6 +41,8 @@ const writeLog = (LOG, ipText, count) => {
     count++;
 }
 
+existFileDelete(ACCESS_LOG_34);
+existFileDelete(ACCESS_LOG_89);
 line.on("line", function (input) {
     if (input.includes(ipText1)) {
         ++numLine34;
