@@ -39,17 +39,17 @@ const readAllFile = (pathDir) => {
                         console.log(result.replaceAll(searchText, colors.red(searchText)));
                         let count = result.split(searchText).length - 1;
                         if (count === 0) console.log("Совпадений нет!")
-                        else console.log('Количество совпадений: ' + count)
+                        else console.log('Количество совпадений: ' + count);
                     }
                 })
+                .catch((error) => {
+                    console.log(error);
+                });
         })
-        .catch((error) => {
-            console.log(error);
-        });
 };
 
 rl.question(`Please enter directory: `, (dirSearch) => {
-    readAllFile(path.join(homeDir, dirSearch))
+    readAllFile(path.join(homeDir, dirSearch));
 });
 
 rl.on('close', () => process.exit(0));
