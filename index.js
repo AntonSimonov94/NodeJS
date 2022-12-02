@@ -15,36 +15,41 @@ const readAllFile = (pathDir) => {
         .readdir(path.join(pathDir))
         .then((choices) => {
             return inquirer.prompt([{
-                name: "fileName",
-                type: "list",
-                message: "Choose file",
-                choices
+                    name: "fileName",
+                    type: "list",
+                    message: "Choose file",
+                    choices
                 },
                 {
                     name: 'searchText',
                     type: 'input',
-                    message: 'Enter text to search:'
-                }]
-            )
-        })
-        .then (async ({fileName, searchText}) => {
-            const fullPath = path.join(pathDir,fileName);
-            const stat = await fsp.stat(fullPath);
-            if(stat.isDirectory()) return readAllFile(fullPath)
-            return Promise.all([
-                fsp.readFile(path.join(pathDir,fileName), 'utf-8'),
-                Promise.resolve(searchText)
+                    message: 'Enter text to search: '
+                }
             ])
-                .then(([result, search2]) => {
-
-                    if (result.includes(search2)) console.log(colors.red(result))
-                    else (console.log(result))
+        })
+        .then(async ({fileName, searchText}) => {
+            const fullPath = path.join(pathDir, fileName);
+            const stat = await fsp.stat(fullPath);
+            if (stat.isDirectory()) return readAllFile(fullPath)
+            else return new Promise((resolve, reject) => {
+                    resolve(fsp.readFile(path.join(pathDir, fileName), 'utf-8'))
+                })
+                .then((result) => {
+                    if (result) {
+                        console.log(result.replaceAll(searchText, colors.red(searchText)));
+                        let count = result.split(searchText).length - 1;
+                        if (count === 0) console.log("Совпадений нет!")
+                        else console.log('Количество совпадений: ' + count)
+                    }
                 })
         })
-
+        .catch((error) => {
+            console.log(error);
+        });
 };
 
 rl.question(`Please enter directory: `, (dirSearch) => {
-    readAllFile(path.join(homeDir,dirSearch))
+    readAllFile(path.join(homeDir, dirSearch))
 });
-rl.on('close', () => process.exit(0))
+
+rl.on('close', () => process.exit(0));
