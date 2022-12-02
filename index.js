@@ -32,15 +32,16 @@ const readAllFile = (pathDir) => {
             const stat = await fsp.stat(fullPath);
             if(stat.isDirectory()) return readAllFile(fullPath)
             return Promise.all([
-                fsp.readFile(path.join(homeDir,fileName), 'utf-8'),
+                fsp.readFile(path.join(pathDir,fileName), 'utf-8'),
                 Promise.resolve(searchText)
             ])
-        })
-        .then(([result, search2]) => {
+                .then(([result, search2]) => {
 
-            if (result.includes(search2)) console.log(colors.red(result))
-        else (console.log(result))
+                    if (result.includes(search2)) console.log(colors.red(result))
+                    else (console.log(result))
+                })
         })
+
 };
 
 rl.question(`Please enter directory: `, (dirSearch) => {
