@@ -4,6 +4,7 @@ import fsp from "fs/promises";
 import path from "path";
 import colors from 'colors';
 import http from "http"
+import fs from "fs";
 
 
 const host = "localhost";
@@ -13,7 +14,15 @@ const server = http.createServer((request, response) => {
     if (request.method === "GET") {
         const url = request.url.split("?")[0];
         const lastPath = path.join(process.cwd(), url);
-        response.end('Hello world!')
+        fsp
+            .readdir(lastPath)
+            .then((list) => {
+                list.forEach((link) => {
+                    response.write(`<h1>${link}</h1>`)
+                })
+                response.end();
+
+                })
     }
 })
 
