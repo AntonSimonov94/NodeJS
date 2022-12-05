@@ -1,49 +1,37 @@
-import inquirer from "inquirer";
-import readline from 'readline'
 import fsp from "fs/promises";
 import path from "path";
-import colors from 'colors';
+import http from "http"
+import fs from "fs";
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-const homeDir = process.cwd();
+const host = "localhost";
+const port = 3000;
 
-const readAllFile = (pathDir) => {
-    fsp
-        .readdir(path.join(pathDir))
-        .then((choices) => {
-            return inquirer.prompt([{
-                name: "fileName",
-                type: "list",
-                message: "Choose file",
-                choices
-                },
-                {
-                    name: 'searchText',
-                    type: 'input',
-                    message: 'Enter text to search:'
-                }]
-            )
+const server = http.createServer((request, response) => {
+    if (request.method === "GET") {
+        const url = request.url.split("?")[0];
+        const lastPath = path.join(process.cwd(), url);
+
+        fs.stat(lastPath, (error, stats) => {
+            if (error) {
+                console.log(error)
+            } else {
+                if (stats.isDirectory(lastPath)) {
+                    fsp
+                        .readdir(lastPath)
+                        .then((list) => {
+                            list.forEach((link) => {
+                                response.write(`<h1><a href=${path.join(url, link)}>${link}</a></h1>`, 'utf-8')
+                            })
+                            response.end()
+                        })
+                } else {
+                    const readStream = fs.createReadStream(lastPath);
+                    readStream.pipe(response)
+                }
+            }
         })
-        .then (async ({fileName, searchText}) => {
-            const fullPath = path.join(pathDir,fileName);
-            const stat = await fsp.stat(fullPath);
-            if(stat.isDirectory()) return readAllFile(fullPath)
-            return Promise.all([
-                fsp.readFile(path.join(homeDir,fileName), 'utf-8'),
-                Promise.resolve(searchText)
-            ])
-        })
-        .then(([result, search2]) => {
+    }
+})
 
-            if (result.includes(search2)) console.log(colors.red(result))
-        else (console.log(result))
-        })
-};
-
-rl.question(`Please enter directory: `, (dirSearch) => {
-    readAllFile(path.join(homeDir,dirSearch))
-});
-rl.on('close', () => process.exit(0))
+server.listen(port, host, () =>
+    console.log(`Server running at http://${host}:${port}`))
