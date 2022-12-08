@@ -15,9 +15,14 @@
 </body>
 <script type="text/javascript">
     const socket = io('localhost:3000')
-    socket.on('connect', () => console.log('Connection with localhost:3000 created'))
-    socket.on('server-msg', ({ msg }) => {
-        const msgSpan = document.createElement('span').innerHTML = msg;
+    socket.on('connection', () => console.log('Connection with localhost:3000 created'))
+    socket.on('server-new-client', ({ msg, clientName}) => {
+        const msgSpan = document.createElement('span').innerHTML = `${msg} ${clientName}`;
+        document.getElementById('messages').append(msgSpan)
+        document.getElementById('messages').append(document.createElement('br'))
+    })
+    socket.on('server-msg', ({ msg, clientName }) => {
+        const msgSpan = document.createElement('span').innerHTML = `${clientName}: ${msg}`;
          document.getElementById('messages').append(msgSpan)
          document.getElementById('messages').append(document.createElement('br'))
     })

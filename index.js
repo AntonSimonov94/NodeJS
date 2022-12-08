@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import { Server } from "socket.io";
 
+
 const host = "localhost";
 const port = 3000;
 
@@ -17,20 +18,25 @@ const server = http.createServer((req, res) => {
         rs.pipe(res);
     }
 });
-let clientID = [];
+
+let name = (Math.random() + 1).toString(36).substring(7);
+console.log("random", name);
+
+
 const io = new Server(server)
 io.on('connection', (client) => {
-    //clientID.push(client.id)
-    //console.log(clientID)
-    console.log('Websocket connected')
+    let userName = (Math.random() + 1).toString(36).substring(7);
+
+    client.broadcast.emit( 'server-new-client', {msg: 'Connected ', clientName : userName})
 
     client.on('client-msg', (data) => {
-        client.broadcast.emit('server-msg', { msg: data.msg })
-        client.emit('server-msg', { msg: data.msg })
+        console.log(userName)
+        client.broadcast.emit('server-msg', {msg: data.msg, clientName: userName })
+        client.emit('server-msg', {msg: data.msg, clientName: userName })
     })
 
-    client.on('disconnect', (client) => {
-        console.log('Websocket disconnection')
+    client.on('disconnect', () => {
+        client.broadcast.emit( 'server-dis-client', {msg: 'Disonnected ', clientName : userName})
     })
 })
 
