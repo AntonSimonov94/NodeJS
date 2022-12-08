@@ -32,10 +32,6 @@ io.on('connection', (client) => {
     client.on('disconnect', (client) => {
         console.log('Websocket disconnection')
     })
-
-    client.on('reconnect', () => {
-        console.log('Websocket reconnect')
-    });
 })
 
 
