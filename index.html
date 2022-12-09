@@ -30,6 +30,7 @@
     socket.on('server-new-client', ({msg, clientName}) => {
         newSpan(msg, clientName);
     })
+
     socket.on('server-msg', ({msg, clientName}) => {
         newSpan(msg, clientName)
     })
@@ -37,6 +38,7 @@
     socket.on('server-dis-client', ({msg, clientName}) => {
         newSpan(msg, clientName)
     })
+
     socket.on('count-client', ({changeCount}) => {
        //console.log(changeCount)
         document.getElementById('footer').innerHTML = `Count client: ${changeCount}`
