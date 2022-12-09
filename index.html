@@ -13,24 +13,40 @@
     <input type="submit" id="send" value="Send" />
     <div id="messages"></div>
 </body>
+<footer>
+    <span id="footer"></span>
+</footer>
 <script type="text/javascript">
-    const socket = io('localhost:3000', {
-        'reconnect': true,
-        'reconnection delay': 500,
-        'max reconnection attempts': 50
+
+    const socket = io('localhost:3000')
+
+    const newSpan = (msg, clientName) => {
+        const msgSpan = document.createElement('span').innerHTML = `${clientName}: ${msg}`;
+        document.getElementById('messages').append(msgSpan)
+        document.getElementById('messages').append(document.createElement('br'))
+    }
+
+    socket.on('connection', () => console.log('Connection with localhost:3000 created'))
+    socket.on('server-new-client', ({msg, clientName}) => {
+        newSpan(msg, clientName);
     })
-    socket.on('connect', () => console.log('Connection with localhost:3000 created'))
-    socket.on('server-msg', ({ msg }) => {
-        const msgSpan = document.createElement('span').innerHTML = msg;
-         document.getElementById('messages').append(msgSpan)
-         document.getElementById('messages').append(document.createElement('br'))
+    socket.on('server-msg', ({msg, clientName}) => {
+        newSpan(msg, clientName)
+    })
+
+    socket.on('server-dis-client', ({msg, clientName}) => {
+        newSpan(msg, clientName)
+    })
+    socket.on('count-client', ({changeCount}) => {
+       //console.log(changeCount)
+        document.getElementById('footer').innerHTML = `Count client: ${changeCount}`
     })
 
     document.getElementById('send')
         .onclick = function () {
-            socket.emit('client-msg', { msg:document.getElementById('input').value })
-            document.getElementById('input').value = '';
-        }
+        socket.emit('client-msg', {msg: document.getElementById('input').value})
+        document.getElementById('input').value = '';
+    }
 
 </script>
 
