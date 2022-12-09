@@ -19,9 +19,12 @@ const server = http.createServer((req, res) => {
 });
 let clientID = [];
 const io = new Server(server)
+
+
+
 io.on('connection', (client) => {
-    //clientID.push(client.id)
-    //console.log(clientID)
+    clientID.push(client.id)
+    console.log(clientID)
     console.log('Websocket connected')
 
     client.on('client-msg', (data) => {
@@ -30,12 +33,19 @@ io.on('connection', (client) => {
     })
 
     client.on('disconnect', (client) => {
-        console.log('Websocket disconnection')
-    })
-})
+        setTimeout(() => {
+            if(client) {
+                console.log('reconnect')
+            }
+            else console.log('disconnect')
+        }, 1000)
 
 
 
-server.listen(port, host, () =>
-    console.log(`Server running at http://${host}:${port}`)
-);
+    })})
+
+
+server.listen(port, host, () => {
+        console.log(`Server running at http://${host}:${port}`);
+
+    });

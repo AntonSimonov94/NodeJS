@@ -14,7 +14,11 @@
     <div id="messages"></div>
 </body>
 <script type="text/javascript">
-    const socket = io('localhost:3000')
+    const socket = io('localhost:3000', {
+        'reconnect': true,
+        'reconnection delay': 500,
+        'max reconnection attempts': 50
+    })
     socket.on('connect', () => console.log('Connection with localhost:3000 created'))
     socket.on('server-msg', ({ msg }) => {
         const msgSpan = document.createElement('span').innerHTML = msg;
